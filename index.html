@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <title>Preco Pizza</title>
+</head>
+
+<body>
+  <header></header>
+  <main>
+
+    <form>
+
+      <fieldset>
+        <legend>Opa</legend>
+        <div>
+          <section>
+            <div>
+              <label for="idNomePizza">Nome da Pizza</label>
+              <input type="text" name="nomePizza" id="idNomePizza" required>
+            </div>
+            <div>
+              <label for="idTamanhoPizza">Tamanho da Pizza</label>
+              <input type="number" name="tamanhoPizza" id="idTamanhoPizza" placeholder="Diametro em centimetros"
+                required>
+            </div>
+            <label for="idPrecoPizza"> Preco da Pizza</label>
+            <input type="number" name="precoPizza" id="idPrecoPizza" required>
+            <div>
+              <button type="button" id="idBotaoEnviar">Enviar</button>
+            </div>
+          </section>
+        </div>
+
+
+
+
+      </fieldset>
+
+    </form>
+
+    <div id="idResultPizzas" class="table-responsive"></div>
+
+
+    <script>
+
+      let nomePizza = document.getElementById("idNomePizza");
+      let tamanhoPizza = document.getElementById("idTamanhoPizza");
+      let precoPizza = document.getElementById("idPrecoPizza");
+      let botaoEnviar = document.getElementById("idBotaoEnviar");
+      let divTabelaPizza = document.querySelector("#idResultPizzas");
+
+      let listaPizzas = [];
+
+      botaoEnviar.addEventListener("click", function () {
+        listaPizzas.push({
+          nome: nomePizza.value,
+          tamanho: tamanhoPizza.value,
+          preco: precoPizza.value
+        });
+
+        console.log(listaPizzas.length);
+
+        if (listaPizzas.length == 1) {
+          let tabela = document.createElement("table");
+          let thead = document.createElement("thead");
+          let tr = document.createElement("tr");
+          let tdNomePizza = document.createElement("th");
+          let tdTamanhoPizza = document.createElement("th");
+          let tdPrecoPizza = document.createElement("th");
+
+          tabela.className = "table table-bordered table-hover";
+          tdNomePizza.scope = "col";
+          tdTamanhoPizza.scope = "col";
+          tdPrecoPizza.scope = "col";
+
+          divTabelaPizza.appendChild(tabela);
+          tabela.appendChild(thead);
+          thead.appendChild(tr);
+          tdNomePizza.textContent = "Nome";
+          tdTamanhoPizza.textContent = "Tamanho";
+          tdPrecoPizza.textContent = "Preco";
+          tr.appendChild(tdNomePizza);
+          tr.appendChild(tdTamanhoPizza);
+          tr.appendChild(tdPrecoPizza);
+        }
+
+        
+
+
+
+
+
+      })
+
+      console.log(listaPizzas);
+
+    </script>
+  </main>
+  <footer></footer>
+
+</body>
+
+</html>
+
+
+<!-- Projeto
+
+O software deverá receber diversos tamanhos de pizza e seus respectivos preços e ao final exibir um relatório informando em valores absolutos e relativos (percentual) qual a diferença de preços entre as pizzas e deverá informar qual pizza tem o melhor custo benefício.
+Entradas: 1. Nome comercial (broto, baby, pequena, média, grande, exagerada, gigante, etc), o tamanho da pizza (diâmetro em centímetros) e respectivo preço. O software deverá aceitar tantas entradas quanto o usuário deseja comparar, desde que não haja tamanhos duplicados.
+Saída: relatório contendo todos os nomes e tamanhos de pizza ordenados do melhor para o pior custo benefício. O relatório deverá informar o percentual de diferença do preço de um tamanho para o outro.
+
+
+Nome	Tam.(cm)	Preço	R$ p/cm2	Diferença%
+Broto	15	R$25,00	R$1,00	Melhor CB
+Pequena	25	R$35,00	R$1,40	+40%
+Média	35	R$40,00	R$1,50	+25%
+*Desconsiderar os valores do exemplo (não são valores calculados)
+
+*Cálculo da área do círculo:
+
+a = π . r2
+onde,
+π: constante Pi (3,14)
+r: raio
+
+Versão 2
+O cliente gostou tanto do resultado da versão 1, que decidiu expandir as funcionalidades do software. A versão 2 deverá ser capaz de calcular também a relação custo-benefício de pizzas retangulares e quadradas.
+O software deverá aceitar diversos tamanhos e formatos de pizzas e deverá ser capaz de determinar a relação custo benefício entre elas.
+
+Nome	Tam.(cm)	Preço	R$ p/cm2	Diferença%
+Broto	15	R$25,00	R$1,00	Melhor CB
+Pequena	20x30	R$35,00	R$1,40	+40%
+Média	35	R$40,00	R$1,50	+25%
+*A coluna Tamanho deverá exibir o diâmetro das pizzas redondas, já das pizzas retangulares e quadradas deverá exibir altura e largura. -->
