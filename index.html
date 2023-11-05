@@ -13,31 +13,24 @@
   <header></header>
   <main>
 
-    <form>
+    <form id="idFormPizza">
 
       <fieldset>
         <legend>Opa</legend>
-        <div>
-          <section>
-            <div>
-              <label for="idNomePizza">Nome da Pizza</label>
-              <input type="text" name="nomePizza" id="idNomePizza" required>
-            </div>
-            <div>
-              <label for="idTamanhoPizza">Tamanho da Pizza</label>
-              <input type="number" name="tamanhoPizza" id="idTamanhoPizza" placeholder="Diametro em centimetros"
-                required>
-            </div>
-            <label for="idPrecoPizza"> Preco da Pizza</label>
-            <input type="number" name="precoPizza" id="idPrecoPizza" required>
-            <div>
-              <button type="button" id="idBotaoEnviar">Enviar</button>
-            </div>
-          </section>
+        <div class="mb-3">
+          <label for="idNomePizza" class="form-label">Nome da Pizza</label>
+          <input type="text" name="nomePizza" id="idNomePizza" class="form-control" required>
         </div>
-
-
-
+        <div class="mb-3">
+          <label for="idTamanhoPizza" class="form-label">Tamanho da Pizza</label>
+          <input type="number" name="tamanhoPizza" id="idTamanhoPizza" class="form-control"
+            placeholder="Diametro em centimetros" required>
+        </div>
+        <div class="mb-3">
+          <label for="idPrecoPizza" class="form-label"> Preco da Pizza</label>
+          <input type="number" name="precoPizza" class="form-control" id="idPrecoPizza" required>
+          <button type="button" id="idBotaoEnviar" class="btn btn-primary">Enviar</button>
+        </div>
 
       </fieldset>
 
@@ -48,22 +41,197 @@
 
     <script>
 
-      let nomePizza = document.getElementById("idNomePizza");
-      let tamanhoPizza = document.getElementById("idTamanhoPizza");
-      let precoPizza = document.getElementById("idPrecoPizza");
       let botaoEnviar = document.getElementById("idBotaoEnviar");
       let divTabelaPizza = document.querySelector("#idResultPizzas");
 
       let listaPizzas = [];
 
-      botaoEnviar.addEventListener("click", function () {
-        listaPizzas.push({
-          nome: nomePizza.value,
-          tamanho: tamanhoPizza.value,
-          preco: precoPizza.value
+      //Ao clicar abre a funcao adicionar pizza
+      botaoEnviar.addEventListener("click", function (e) {
+        event.preventDefault();
+
+        if (listaPizzas.length == 0) {
+          montarCabecalhoTabela();
+        }
+
+        let formPizza = document.querySelector("#idFormPizza");
+        let objectPizza = transformPizza(formPizza);
+
+        listaPizzas.push(objectPizza);
+
+        //Sort faz a ordenacao do array de pizzas
+        listaPizzas.sort(function (a, b) {
+          return a.precoCm - b.precoCm;
         });
 
-        console.log(listaPizzas.length);
+
+        for (var i = 0; i < listaPizzas.length; i++) {
+          if (i == 0) {
+            listaPizzas[0].custoBeneficio = "Melhor Custo Beneficio";
+          } else {
+            let variavelPizzaCustoBeneficio = "";
+            variavelPizzaCustoBeneficio = (((listaPizzas[i].precoCm - listaPizzas[i - 1].precoCm) / listaPizzas[i - 1].precoCm) * 100).toFixed(2) + "%";
+            listaPizzas[i].custoBeneficio = variavelPizzaCustoBeneficio;
+          }
+        }
+
+        listaPizzas[0].custoBeneficio = "Melhor CB";
+        idTbodyPizza.innerHTML = "";
+        listaPizzas.forEach(function (pizza, index) {
+
+
+          let tr2 = document.createElement("tr");
+          idTbodyPizza.appendChild(tr2);
+
+          let tdNomePizza = document.createElement("th");
+          let tdTamanhoPizza = document.createElement("td");
+          let tdPrecoPizza = document.createElement("td");
+          let tdCustoBeneficio = document.createElement("td");
+
+
+          tdNomePizza.scope = "row";
+          console.log(pizza.nome);
+          tdNomePizza.textContent = pizza.nome;
+          tdTamanhoPizza.textContent = pizza.tamanho + " cm";
+          tdPrecoPizza.textContent = "R$ " + pizza.precoCm + " / cm2";
+          tdCustoBeneficio.textContent = pizza.custoBeneficio;
+
+
+          tr2.appendChild(tdNomePizza);
+          tr2.appendChild(tdTamanhoPizza);
+          tr2.appendChild(tdPrecoPizza);
+          tr2.appendChild(tdCustoBeneficio);
+
+        });
+
+      })
+
+
+      function montarCabecalhoTabela() {
+
+        let tabela = document.createElement("table");
+        let thead = document.createElement("thead");
+        let tr = document.createElement("tr");
+        let tdNomePizza = document.createElement("th");
+        let tdTamanhoPizza = document.createElement("th");
+        let tdPrecoPizza = document.createElement("th");
+        let tdCustoBeneficio = document.createElement("th");
+
+        let tbody = document.createElement("tbody");
+
+        tabela.className = "table table-bordered table-hover";
+        tdNomePizza.scope = "col";
+        tdTamanhoPizza.scope = "col";
+        tdPrecoPizza.scope = "col";
+        tdCustoBeneficio.scope = "col";
+
+        tbody.id = "idTbodyPizza";
+
+        divTabelaPizza.appendChild(tabela);
+        tabela.appendChild(thead);
+        tabela.appendChild(tbody);
+        thead.appendChild(tr);
+
+
+        tdNomePizza.textContent = "Nome";
+        tdTamanhoPizza.textContent = "Tamanho";
+        tdPrecoPizza.textContent = "Preco/cm2";
+        tdCustoBeneficio.textContent = "Custo Beneficio";
+
+
+        tr.appendChild(tdNomePizza);
+        tr.appendChild(tdTamanhoPizza);
+        tr.appendChild(tdPrecoPizza);
+        tr.appendChild(tdCustoBeneficio);
+
+      }
+
+
+      function transformPizza(formPizza) {
+        let pizza = {
+          nome: formPizza.idNomePizza.value,
+          tamanho: formPizza.idTamanhoPizza.value,
+          precoCm: areaPizzaRedonda(formPizza.idPrecoPizza.value, formPizza.idTamanhoPizza.value),
+          custoBeneficio: 0
+        }
+        return pizza;
+
+      }
+
+      function areaPizzaRedonda(preco, tamanho) {
+        let precoPorArea = 0;
+        let area = Math.PI * ((tamanho / 2) * (tamanho / 2));
+        precoPorArea = (preco / area).toFixed(2);
+        return precoPorArea;
+      }
+
+
+
+
+
+
+
+      /*
+       if (listaPizzas.length == 1) {
+                let tabela = document.createElement("table");
+                let thead = document.createElement("thead");
+                let tr = document.createElement("tr");
+                let tdNomePizza = document.createElement("th");
+                let tdTamanhoPizza = document.createElement("th");
+                let tdPrecoPizza = document.createElement("th");
+                let tbody = document.createElement("tbody");
+
+
+                tabela.className = "table table-bordered table-hover";
+                tdNomePizza.scope = "col";
+                tdTamanhoPizza.scope = "col";
+                tdPrecoPizza.scope = "col";
+
+                tbody.id = "idTbodyPizza";
+
+                divTabelaPizza.appendChild(tabela);
+                tabela.appendChild(thead);
+                tabela.appendChild(tbody);
+                thead.appendChild(tr);
+                tdNomePizza.textContent = "Nome";
+                tdTamanhoPizza.textContent = "Tamanho";
+                tdPrecoPizza.textContent = "Preco";
+                tr.appendChild(tdNomePizza);
+                tr.appendChild(tdTamanhoPizza);
+                tr.appendChild(tdPrecoPizza);
+
+              }
+
+
+              let tBodyPizza = document.querySelector("#idTbodyPizza");
+              let tr2 = document.createElement("tr");
+
+              tBodyPizza.appendChild(tr2);
+
+              let tdNomePizza = document.createElement("th");
+              let tdTamanhoPizza = document.createElement("td");
+              let tdPrecoPizza = document.createElement("td");
+
+              tdNomePizza.scope = "row";
+
+              tdNomePizza.textContent = objectPizza.nome;
+              tdTamanhoPizza.textContent = objectPizza.tamanho;
+              tdPrecoPizza.textContent = objectPizza.preco;
+              tr2.appendChild(tdNomePizza);
+              tr2.appendChild(tdTamanhoPizza);
+              tr2.appendChild(tdPrecoPizza);
+
+
+              //  let nome = formPizza.
+
+
+            })
+      */
+
+
+
+      /*
+       console.log(listaPizzas.length);
 
         if (listaPizzas.length == 1) {
           let tabela = document.createElement("table");
@@ -87,17 +255,28 @@
           tr.appendChild(tdNomePizza);
           tr.appendChild(tdTamanhoPizza);
           tr.appendChild(tdPrecoPizza);
+          tabela.appendChild(tbody)
         }
 
-        
 
 
+          let tr2 = document.createElement("tr");
+          tbody.appendChild(tr2);
 
+          let tdNomePizza = document.createElement("th");
+          let tdTamanhoPizza = document.createElement("td");
+          let tdPrecoPizza = document.createElement("td");
 
+          tdNomePizza.scope = "row";
 
-      })
+          tdNomePizza.textContent = listaPizzas.nome.value;
+          tdTamanhoPizza.textContent = listaPizzas.tamanho.value;
+          tdPrecoPizza.textContent = listaPizzas.preco.value;
+          tr2.appendChild(tdNomePizza);
+          tr2.appendChild(tdTamanhoPizza);
+          tr2.appendChild(tdPrecoPizza);
 
-      console.log(listaPizzas);
+      */
 
     </script>
   </main>
@@ -106,6 +285,14 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
 
 
 <!-- Projeto
