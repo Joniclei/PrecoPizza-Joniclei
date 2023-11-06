@@ -1,0 +1,273 @@
+<!--
+    Programa: Validador de senha
+    Descrição:
+
+    O programa recebe valores com nome diametro e preco,valida se o diametro já
+    existe em outro indice do array pizza,depois calcula o preco por
+    cm2, e mostra o melhor custo beneficio.
+
+
+
+    Autor: Joniclei B. Jr
+    Data: 12.10.2023
+
+    Histórico de Alterações:
+     V |   Data   | Autor/Descrição
+    ----------------------------------------------------------------------------
+     0 | 03.11.23 | Joniclei B. Jr - Versão inicial
+       |          | Criação do Programa
+    ----------------------------------------------------------------------------
+     1 | 04.11.23 | Joniclei B. Jr - Versão inicial
+       |          | Validacoes e calculos
+    ----------------------------------------------------------------------------
+    2  | 05.11.23 | Joniclei B. Jr - Versão inicial
+       |          | Montando os resultados na tabela
+    ----------------------------------------------------------------------------
+
+
+-->
+
+<!-- Análise (Rascunho...)
+-----------------
+    entradas:
+    - Valores de diametro e preco
+    - 3 input para digitar
+
+
+    processamento:
+    - Escuta todo o form e deposit transforma os values em object e calcula o
+    preco por cm2
+    - Validar se a diametro ja existe no array
+    - Validar os custo beneficio
+    - Cria uma tabela com os resultados a cada click no botao
+
+    saídas:
+    - Tabela com os resultados
+-->
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+  <title>Preco Pizza</title>
+</head>
+
+<body>
+  <header></header>
+  <main>
+
+    <form id="idFormPizza" class="classDoFormInputs">
+
+      <fieldset>
+        <legend>Opa</legend>
+        <div class="mb-3">
+          <label for="idNomePizza" class="form-label">Nome da Pizza</label>
+          <input type="text" name="nomePizza" id="idNomePizza" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="idTamanhoPizza" class="form-label">Tamanho da Pizza</label>
+          <input type="number" name="tamanhoPizza" id="idTamanhoPizza" class="form-control"
+            placeholder="Diametro em centimetros" required>
+        </div>
+        <div class="mb-3">
+          <label for="idPrecoPizza" class="form-label"> Preco da Pizza</label>
+          <input type="number" name="precoPizza" class="form-control" id="idPrecoPizza" required>
+          <button type="button" id="idBotaoEnviar" class="btn btn-primary">Enviar</button>
+          <button type="reset" class="btn btn-primary">Reset</button>
+          </div>
+
+      </fieldset>
+
+    </form>
+
+    <div id="idResultPizzas" class="table-responsive"></div>
+
+
+    <script>
+
+      let botaoEnviar = document.getElementById("idBotaoEnviar");
+      let divTabelaPizza = document.querySelector("#idResultPizzas");
+
+      let listaPizzas = [];
+
+      //Ao clicar abre a funcao adicionar pizza
+      botaoEnviar.addEventListener("click", function (e) {
+        event.preventDefault();
+
+        if (listaPizzas.length == 0) {
+          montarCabecalhoTabela();
+        }
+
+        let formPizza = document.querySelector("#idFormPizza");
+        let objectPizza = transformPizza(formPizza);
+
+
+
+        if (listaPizzas.some(pizza => pizza.tamanho == objectPizza.tamanho)) {
+          alert("Tamanho ja cadastrado");
+          return;
+        }
+        listaPizzas.push(objectPizza);
+
+        //Sort faz a ordenacao do array de pizzas
+        listaPizzas.sort(function (a, b) {
+          return a.precoCm - b.precoCm;
+        });
+
+
+        for (var i = 0; i < listaPizzas.length; i++) {
+          if (i == 0) {
+            listaPizzas[0].custoBeneficio = "Melhor Custo Beneficio";
+          } else {
+            let variavelPizzaCustoBeneficio = "";
+            variavelPizzaCustoBeneficio = (((listaPizzas[i].precoCm - listaPizzas[i - 1].precoCm) / listaPizzas[i - 1].precoCm) * 100).toFixed(2) + "%";
+            listaPizzas[i].custoBeneficio = variavelPizzaCustoBeneficio;
+          }
+        }
+
+        listaPizzas[0].custoBeneficio = "Melhor CB";
+        idTbodyPizza.innerHTML = "";
+        listaPizzas.forEach(function (pizza, index) {
+
+
+          let tr2 = document.createElement("tr");
+          idTbodyPizza.appendChild(tr2);
+
+          let tdNomePizza = document.createElement("th");
+          let tdTamanhoPizza = document.createElement("td");
+          let tdPrecoPizza = document.createElement("td");
+          let tdCustoBeneficio = document.createElement("td");
+
+
+          tdNomePizza.scope = "row";
+          console.log(pizza.nome);
+          tdNomePizza.textContent = pizza.nome;
+          tdTamanhoPizza.textContent = pizza.tamanho + " cm";
+          tdPrecoPizza.textContent = "R$ " + pizza.precoCm + " / cm2";
+          tdCustoBeneficio.textContent = pizza.custoBeneficio;
+
+
+          tr2.appendChild(tdNomePizza);
+          tr2.appendChild(tdTamanhoPizza);
+          tr2.appendChild(tdPrecoPizza);
+          tr2.appendChild(tdCustoBeneficio);
+
+        });
+
+      })
+
+
+      function montarCabecalhoTabela() {
+
+        let tabela = document.createElement("table");
+        let thead = document.createElement("thead");
+        let tr = document.createElement("tr");
+        let tdNomePizza = document.createElement("th");
+        let tdTamanhoPizza = document.createElement("th");
+        let tdPrecoPizza = document.createElement("th");
+        let tdCustoBeneficio = document.createElement("th");
+
+        let tbody = document.createElement("tbody");
+
+        tabela.className = "table table-bordered table-hover";
+        tdNomePizza.scope = "col";
+        tdTamanhoPizza.scope = "col";
+        tdPrecoPizza.scope = "col";
+        tdCustoBeneficio.scope = "col";
+
+        tbody.id = "idTbodyPizza";
+
+        divTabelaPizza.appendChild(tabela);
+        tabela.appendChild(thead);
+        tabela.appendChild(tbody);
+        thead.appendChild(tr);
+
+
+        tdNomePizza.textContent = "Nome";
+        tdTamanhoPizza.textContent = "Tamanho";
+        tdPrecoPizza.textContent = "Preco/cm2";
+        tdCustoBeneficio.textContent = "Custo Beneficio";
+
+
+        tr.appendChild(tdNomePizza);
+        tr.appendChild(tdTamanhoPizza);
+        tr.appendChild(tdPrecoPizza);
+        tr.appendChild(tdCustoBeneficio);
+
+      }
+
+
+      function transformPizza(formPizza) {
+        let pizza = {
+          nome: formPizza.idNomePizza.value,
+          tamanho: formPizza.idTamanhoPizza.value,
+          precoCm: areaPizzaRedonda(formPizza.idPrecoPizza.value, formPizza.idTamanhoPizza.value),
+          custoBeneficio: 0
+        }
+        return pizza;
+
+      }
+
+      function areaPizzaRedonda(preco, tamanho) {
+        let precoPorArea = 0;
+        let area = Math.PI * ((tamanho / 2) * (tamanho / 2));
+        precoPorArea = (preco / area).toFixed(2);
+        return precoPorArea;
+      }
+
+    </script>
+  </main>
+  <footer></footer>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+<!-- Projeto
+
+O software deverá receber diversos tamanhos de pizza e seus respectivos preços e ao final exibir um relatório informando em valores absolutos e relativos (percentual) qual a diferença de preços entre as pizzas e deverá informar qual pizza tem o melhor custo benefício.
+Entradas: 1. Nome comercial (broto, baby, pequena, média, grande, exagerada, gigante, etc), o tamanho da pizza (diâmetro em centímetros) e respectivo preço. O software deverá aceitar tantas entradas quanto o usuário deseja comparar, desde que não haja tamanhos duplicados.
+Saída: relatório contendo todos os nomes e tamanhos de pizza ordenados do melhor para o pior custo benefício. O relatório deverá informar o percentual de diferença do preço de um tamanho para o outro.
+
+
+Nome	Tam.(cm)	Preço	R$ p/cm2	Diferença%
+Broto	15	R$25,00	R$1,00	Melhor CB
+Pequena	25	R$35,00	R$1,40	+40%
+Média	35	R$40,00	R$1,50	+25%
+*Desconsiderar os valores do exemplo (não são valores calculados)
+
+*Cálculo da área do círculo:
+
+a = π . r2
+onde,
+π: constante Pi (3,14)
+r: raio
+
+Versão 2
+O cliente gostou tanto do resultado da versão 1, que decidiu expandir as funcionalidades do software. A versão 2 deverá ser capaz de calcular também a relação custo-benefício de pizzas retangulares e quadradas.
+O software deverá aceitar diversos tamanhos e formatos de pizzas e deverá ser capaz de determinar a relação custo benefício entre elas.
+
+Nome	Tam.(cm)	Preço	R$ p/cm2	Diferença%
+Broto	15	R$25,00	R$1,00	Melhor CB
+Pequena	20x30	R$35,00	R$1,40	+40%
+Média	35	R$40,00	R$1,50	+25%
+*A coluna Tamanho deverá exibir o diâmetro das pizzas redondas, já das pizzas retangulares e quadradas deverá exibir altura e largura. -->

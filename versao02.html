@@ -9,20 +9,13 @@
 
 
     Autor: Joniclei B. Jr
-    Data: 12.10.2023
+    Data: 03.11.2023
 
     Histórico de Alterações:
      V |   Data   | Autor/Descrição
     ----------------------------------------------------------------------------
-     0 | 03.11.23 | Joniclei B. Jr - Versão inicial
+     0 | 05.11.23 | Joniclei B. Jr - Versão inicial
        |          | Criação do Programa
-    ----------------------------------------------------------------------------
-     1 | 04.11.23 | Joniclei B. Jr - Versão inicial
-       |          | Validacoes e calculos
-    ----------------------------------------------------------------------------
-    2  | 05.11.23 | Joniclei B. Jr - Versão inicial
-       |          | Montando os resultados na tabela
-    ----------------------------------------------------------------------------
 
 
 -->
@@ -42,11 +35,8 @@
     - Cria uma tabela com os resultados a cada click no botao
 
     saídas:
-    - Tabela com os resultados 
+    - Tabela com os resultados
 -->
-
-
-
 
 
 <!DOCTYPE html>
@@ -57,37 +47,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="/style.css">
   <title>Preco Pizza</title>
 </head>
 
 <body>
   <header></header>
   <main>
+    <div class="divInputEResultado">
 
-    <form id="idFormPizza">
+      <form id="idFormPizza" class="classDoFormInputs">
 
-      <fieldset>
-        <legend>Opa</legend>
-        <div class="mb-3">
-          <label for="idNomePizza" class="form-label">Nome da Pizza</label>
-          <input type="text" name="nomePizza" id="idNomePizza" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label for="idTamanhoPizza" class="form-label">Tamanho da Pizza</label>
-          <input type="number" name="tamanhoPizza" id="idTamanhoPizza" class="form-control"
-            placeholder="Diametro em centimetros" required>
-        </div>
-        <div class="mb-3">
-          <label for="idPrecoPizza" class="form-label"> Preco da Pizza</label>
-          <input type="number" name="precoPizza" class="form-control" id="idPrecoPizza" required>
-          <button type="button" id="idBotaoEnviar" class="btn btn-primary">Enviar</button>
-        </div>
+        <fieldset>
+          <legend>Validador de pizzas</legend>
+          <div>
+            <div class="form-check">
 
-      </fieldset>
+              <input type="radio" id="idTipoRedonda" name="pizza" class="btn-check" value="redonda" checked>
+              <label for="idTipoRedonda" class="btn btn-secondary">Pizza Redonda</label>
+            </div>
 
-    </form>
+            <div class="form-check">
 
-    <div id="idResultPizzas" class="table-responsive"></div>
+              <input type="radio" id="idTipoQuadrada" name="pizza" class="btn-check" value="quadrada">
+              <label for="idTipoQuadrada" class="btn btn-secondary">Pizza Quadrada</label>
+            </div>
+
+            <div class="form-check">
+
+              <input type="radio" id="idTipoRetangular" name="pizza" class="btn-check" value="retangular">
+              <label for="idTipoRetangular" class="btn btn-secondary">Pizza Retangular</label>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="idNomePizza" class="form-label">Nome da Pizza</label>
+            <input type="text" name="nomePizza" id="idNomePizza" class="form-control" class="inputDasPizzas" required>
+          </div>
+          <div class="mb-3">
+            <label for="idTamanhoPizza" class="form-label">Diametro da Pizza</label>
+            <input type="number" name="tamanhoPizza" id="idTamanhoPizza" class="form-control"
+              placeholder="Diametro em centimetros" class="inputDasPizzas"  required>
+          </div>
+          <div class="mb-3" id="idAlturaDoRetangulo">
+
+          </div>
+          <div class="mb-3">
+            <label for="idPrecoPizza" class="form-label"> Preco da Pizza</label>
+            <input type="number" name="precoPizza" class="form-control" id="idPrecoPizza" class="inputDasPizzas"  required>
+            <button type="button" id="idBotaoEnviar" class="btn btn-primary">Enviar</button>
+            <button type="reset" class="btn btn-primary">Reset</button>
+          </div>
+
+        </fieldset>
+
+      </form>
+
+      <div id="idResultPizzas" class="table-responsive"></div>
+    </div>
 
 
     <script>
@@ -95,17 +112,73 @@
       let botaoEnviar = document.getElementById("idBotaoEnviar");
       let divTabelaPizza = document.querySelector("#idResultPizzas");
 
+      let radioRedonda = document.querySelector("#idTipoRedonda");
+      let radioQuadrado = document.querySelector("#idTipoQuadrada");
+      let radioRetangular = document.querySelector("#idTipoRetangular");
+
       let listaPizzas = [];
+
+      radioRedonda.addEventListener("click", function (e) {
+        let divAltura = document.querySelector("#idAlturaDoRetangulo");
+
+        divAltura.innerHTML = "";
+
+        let inputLargura = document.querySelector("#idTamanhoPizza");
+        inputLargura.placeholder = "Diametro em centimetros";
+        inputLargura.innerHTML = "Diametro pizza";
+      })
+
+      radioQuadrado.addEventListener("click", function (e) {
+        let divAltura = document.querySelector("#idAlturaDoRetangulo");
+
+        divAltura.innerHTML = "";
+
+        let inputLargura = document.querySelector("#idTamanhoPizza");
+        inputLargura.placeholder = "Largura em centimetros";
+        inputLargura.innerHTML = "Largura pizza";
+
+      })
+
+      radioRetangular.addEventListener("click", function (e) {
+        let inputLargura = document.querySelector("#idTamanhoPizza");
+        let inputAltura = document.createElement("input");
+        let labelAltura = document.createElement("label");
+        let divAltura = document.querySelector("#idAlturaDoRetangulo");
+
+        inputLargura.placeholder = "Largura em centimetros";
+        inputLargura.innerHTML = "Largura pizza"
+
+        labelAltura.innerHTML = "Altura pizza";
+        labelAltura.for = "idAlturaPizza";
+        labelAltura.className = "form-label";
+
+        inputAltura.placeholder = "Altura em centimetros";
+        inputAltura.type = "number";
+        inputAltura.name = "alturaPizza";
+        inputAltura.id = "idAlturaPizza";
+        inputAltura.className = "form-control";
+
+        inputAltura.required = true;
+
+        divAltura.appendChild(labelAltura);
+        divAltura.appendChild(inputAltura);
+
+      })
 
       //Ao clicar abre a funcao adicionar pizza
       botaoEnviar.addEventListener("click", function (e) {
         event.preventDefault();
+
+
 
         if (listaPizzas.length == 0) {
           montarCabecalhoTabela();
         }
 
         let formPizza = document.querySelector("#idFormPizza");
+
+
+
         let objectPizza = transformPizza(formPizza);
 
 
@@ -208,17 +281,43 @@
         let pizza = {
           nome: formPizza.idNomePizza.value,
           tamanho: formPizza.idTamanhoPizza.value,
-          precoCm: areaPizzaRedonda(formPizza.idPrecoPizza.value, formPizza.idTamanhoPizza.value),
+          precoCm: 0,
           custoBeneficio: 0
         }
+
+        if (formPizza.idTipoRedonda.checked || formPizza.idTipoQuadrada.checked) {
+          pizza.precoCm = areaPizza(formPizza.idPrecoPizza.value, formPizza.idTamanhoPizza.value, 0, formPizza.idTipoQuadrada.checked, false, formPizza.idTipoRedonda.checked);
+        } else {
+          pizza.precoCm = areaPizza(formPizza.idPrecoPizza.value, formPizza.idTamanhoPizza.value, formPizza.idAlturaPizza.value, false, formPizza.idTipoRetangular.checked, false);
+        }
+
         return pizza;
 
       }
 
-      function areaPizzaRedonda(preco, tamanho) {
+
+      function areaPizza(preco, tamanho, altura, quadrada, retangular, redonda) {
+
         let precoPorArea = 0;
-        let area = Math.PI * ((tamanho / 2) * (tamanho / 2));
+        let area = 0;
+
+        if (quadrada) {
+          console.log("quadrada")
+          area = tamanho * tamanho;
+        } else if (retangular) {
+          console.log("retangular")
+          area = tamanho * altura;
+        } else if (redonda) {
+
+          console.log("aqui")
+
+          area = Math.PI * ((tamanho / 2) * (tamanho / 2));
+          console.log(area)
+        }
         precoPorArea = (preco / area).toFixed(2);
+
+
+
         return precoPorArea;
       }
 
@@ -241,23 +340,6 @@
 
 <!-- Projeto
 
-O software deverá receber diversos tamanhos de pizza e seus respectivos preços e ao final exibir um relatório informando em valores absolutos e relativos (percentual) qual a diferença de preços entre as pizzas e deverá informar qual pizza tem o melhor custo benefício.
-Entradas: 1. Nome comercial (broto, baby, pequena, média, grande, exagerada, gigante, etc), o tamanho da pizza (diâmetro em centímetros) e respectivo preço. O software deverá aceitar tantas entradas quanto o usuário deseja comparar, desde que não haja tamanhos duplicados.
-Saída: relatório contendo todos os nomes e tamanhos de pizza ordenados do melhor para o pior custo benefício. O relatório deverá informar o percentual de diferença do preço de um tamanho para o outro.
-
-
-Nome	Tam.(cm)	Preço	R$ p/cm2	Diferença%
-Broto	15	R$25,00	R$1,00	Melhor CB
-Pequena	25	R$35,00	R$1,40	+40%
-Média	35	R$40,00	R$1,50	+25%
-*Desconsiderar os valores do exemplo (não são valores calculados)
-
-*Cálculo da área do círculo:
-
-a = π . r2
-onde,
-π: constante Pi (3,14)
-r: raio
 
 Versão 2
 O cliente gostou tanto do resultado da versão 1, que decidiu expandir as funcionalidades do software. A versão 2 deverá ser capaz de calcular também a relação custo-benefício de pizzas retangulares e quadradas.
