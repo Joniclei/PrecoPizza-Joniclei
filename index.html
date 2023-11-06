@@ -1,3 +1,54 @@
+<!--
+    Programa: Validador de senha
+    Descrição:
+
+    O programa recebe valores com nome diametro e preco,valida se o diametro já
+    existe em outro indice do array pizza,depois calcula o preco por
+    cm2, e mostra o melhor custo beneficio.
+
+
+
+    Autor: Joniclei B. Jr
+    Data: 12.10.2023
+
+    Histórico de Alterações:
+     V |   Data   | Autor/Descrição
+    ----------------------------------------------------------------------------
+     0 | 03.11.23 | Joniclei B. Jr - Versão inicial
+       |          | Criação do Programa
+    ----------------------------------------------------------------------------
+     1 | 04.11.23 | Joniclei B. Jr - Versão inicial
+       |          | Validacoes e calculos
+    ----------------------------------------------------------------------------
+    2  | 05.11.23 | Joniclei B. Jr - Versão inicial
+       |          | Montando os resultados na tabela
+    ----------------------------------------------------------------------------
+
+
+-->
+
+<!-- Análise (Rascunho...)
+-----------------
+    entradas:
+    - Valores de diametro e preco
+    - 3 input para digitar
+
+
+    processamento:
+    - Escuta todo o form e deposit transforma os values em object e calcula o
+    preco por cm2
+    - Validar se a diametro ja existe no array
+    - Validar os custo beneficio
+    - Cria uma tabela com os resultados a cada click no botao
+
+    saídas:
+    - Tabela com os resultados 
+-->
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -57,6 +108,12 @@
         let formPizza = document.querySelector("#idFormPizza");
         let objectPizza = transformPizza(formPizza);
 
+
+
+        if (listaPizzas.some(pizza => pizza.tamanho == objectPizza.tamanho)) {
+          alert("Tamanho ja cadastrado");
+          return;
+        }
         listaPizzas.push(objectPizza);
 
         //Sort faz a ordenacao do array de pizzas
@@ -164,119 +221,6 @@
         precoPorArea = (preco / area).toFixed(2);
         return precoPorArea;
       }
-
-
-
-
-
-
-
-      /*
-       if (listaPizzas.length == 1) {
-                let tabela = document.createElement("table");
-                let thead = document.createElement("thead");
-                let tr = document.createElement("tr");
-                let tdNomePizza = document.createElement("th");
-                let tdTamanhoPizza = document.createElement("th");
-                let tdPrecoPizza = document.createElement("th");
-                let tbody = document.createElement("tbody");
-
-
-                tabela.className = "table table-bordered table-hover";
-                tdNomePizza.scope = "col";
-                tdTamanhoPizza.scope = "col";
-                tdPrecoPizza.scope = "col";
-
-                tbody.id = "idTbodyPizza";
-
-                divTabelaPizza.appendChild(tabela);
-                tabela.appendChild(thead);
-                tabela.appendChild(tbody);
-                thead.appendChild(tr);
-                tdNomePizza.textContent = "Nome";
-                tdTamanhoPizza.textContent = "Tamanho";
-                tdPrecoPizza.textContent = "Preco";
-                tr.appendChild(tdNomePizza);
-                tr.appendChild(tdTamanhoPizza);
-                tr.appendChild(tdPrecoPizza);
-
-              }
-
-
-              let tBodyPizza = document.querySelector("#idTbodyPizza");
-              let tr2 = document.createElement("tr");
-
-              tBodyPizza.appendChild(tr2);
-
-              let tdNomePizza = document.createElement("th");
-              let tdTamanhoPizza = document.createElement("td");
-              let tdPrecoPizza = document.createElement("td");
-
-              tdNomePizza.scope = "row";
-
-              tdNomePizza.textContent = objectPizza.nome;
-              tdTamanhoPizza.textContent = objectPizza.tamanho;
-              tdPrecoPizza.textContent = objectPizza.preco;
-              tr2.appendChild(tdNomePizza);
-              tr2.appendChild(tdTamanhoPizza);
-              tr2.appendChild(tdPrecoPizza);
-
-
-              //  let nome = formPizza.
-
-
-            })
-      */
-
-
-
-      /*
-       console.log(listaPizzas.length);
-
-        if (listaPizzas.length == 1) {
-          let tabela = document.createElement("table");
-          let thead = document.createElement("thead");
-          let tr = document.createElement("tr");
-          let tdNomePizza = document.createElement("th");
-          let tdTamanhoPizza = document.createElement("th");
-          let tdPrecoPizza = document.createElement("th");
-
-          tabela.className = "table table-bordered table-hover";
-          tdNomePizza.scope = "col";
-          tdTamanhoPizza.scope = "col";
-          tdPrecoPizza.scope = "col";
-
-          divTabelaPizza.appendChild(tabela);
-          tabela.appendChild(thead);
-          thead.appendChild(tr);
-          tdNomePizza.textContent = "Nome";
-          tdTamanhoPizza.textContent = "Tamanho";
-          tdPrecoPizza.textContent = "Preco";
-          tr.appendChild(tdNomePizza);
-          tr.appendChild(tdTamanhoPizza);
-          tr.appendChild(tdPrecoPizza);
-          tabela.appendChild(tbody)
-        }
-
-
-
-          let tr2 = document.createElement("tr");
-          tbody.appendChild(tr2);
-
-          let tdNomePizza = document.createElement("th");
-          let tdTamanhoPizza = document.createElement("td");
-          let tdPrecoPizza = document.createElement("td");
-
-          tdNomePizza.scope = "row";
-
-          tdNomePizza.textContent = listaPizzas.nome.value;
-          tdTamanhoPizza.textContent = listaPizzas.tamanho.value;
-          tdPrecoPizza.textContent = listaPizzas.preco.value;
-          tr2.appendChild(tdNomePizza);
-          tr2.appendChild(tdTamanhoPizza);
-          tr2.appendChild(tdPrecoPizza);
-
-      */
 
     </script>
   </main>
